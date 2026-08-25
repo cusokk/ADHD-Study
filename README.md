@@ -13,4 +13,37 @@ So I imagine the result (logical **and** between all points)
 5) System memorize place where user has stoped last time
 
 
+## Stack
+- Backend: FastAPI + SQLAlchemy (async) + SQLite
+- Frontend: React + Vite + TypeScript (nginx serves static + proxies `/api`)
+- Translation: deep-translator (Google Translate, EN → RU, cached in SQLite)
+
+## Run locally
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:8080
+
+### Local dev (without Docker)
+```bash
+# backend
+cd backend && python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+
+# frontend (in another terminal)
+cd frontend && npm install && npm run dev
+# Vite dev server proxies /api -> http://localhost:8000
+```
+
+## API
+- `POST /api/books` — upload `.txt` file (multipart)
+- `POST /api/books/text` — create book from pasted text `{title, content}`
+- `GET  /api/books` — list books
+- `GET  /api/books/{id}` — book content
+- `DELETE /api/books/{id}` — delete book
+- `GET/PUT /api/books/{id}/progress` — load/save reading position
+- `GET /api/translate?text=...&source=en&target=ru` — translate (cached)
 
